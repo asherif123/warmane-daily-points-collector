@@ -118,7 +118,7 @@ def post(url, payload):
 
 def init_cookies():
 	"""Gets login page, to initialize cookies."""
-	response = get(https://www.warmane.com/account/login')
+	response = get('https://www.warmane.com/account/login')
 	return response
 	
 def find_csrf_token(response):
@@ -149,7 +149,7 @@ def login(username, password):
 				'userRM': 'False'}
 				
 	print"\n[Log In]: Username = %s" % username
-	response = post(https://www.warmane.com/account/login', payload)
+	response = post('https://www.warmane.com/account/login', payload)
 	
 	if response.text == '{"redirect":["\/account"]}':
 		print'[Log In]: Logged in Successfully!'
