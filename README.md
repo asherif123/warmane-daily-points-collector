@@ -1,1 +1,1 @@
-# warmane-daily-points-collector
+Warmane Daily Points Collector
