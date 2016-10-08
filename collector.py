@@ -129,12 +129,9 @@ def find_csrf_token(response):
 	cross site scripting.
 	"""
 	soup = BeautifulSoup(response.text, 'lxml')
-	metas = soup.find_all('meta')
-	for meta in metas:
-		if 'csrf-token' in meta.prettify():
-			#Add CSRF-Token value to custom_headers.
-			custom_headers['X-CSRF-Token'] = meta['content']
-			break
+	csrf_token = soup.find('meta', {'name': 'csrf-token'})['content']
+	#Add CSRF-Token value to custom_headers.
+	custom_headers['X-CSRF-Token'] = csrf_token
 
 def login(username, password):
 	"""
@@ -170,35 +167,13 @@ def collect_points():
 	"""Collects daily points. By posting a payload to the account_url."""
 	payload = {'collectpoints': 'true'}
 	response = post('https://www.warmane.com/account', payload)
-	points = find_points()
-	
-	'''All the possible responses'''
-	#'{"messages":{"error":["You have not logged in-game today."]}}'
-	#'{"messages":{"error":["You do not have any points to collect."]}}'
-	#'{"messages":{"success":["Daily points collected."]},"points":[26.2]}'
-	#'{"messages":{"error":["You have already collected your points today."]}}'
-	
-	if "You have not logged in-game today." in response.text:
-		msg = (
-			"[Collect Points]: You have not logged in-game today."
-			" Points: %s" % points)
 
-	#If account does not have the minimum achievement points.
-	elif "You do not have any points to collect." in response.text:
-		msg = (
-			"[Collect Points]: You must have a character with at least"
-			" 1,000 achievement points to be eligible for points."
-			" Points: %s" % points)
-
-	elif "Daily points collected." in response.text:
-		msg = (
-			"[Collect Points]: Daily points collected. Points: %s" % points)
-
-	elif "You have already collected your points today." in response.text:
-		msg = (
-			"[Collect Points]: You've already collected your points today."
-			" Points: %s" % points)
-	print msg
+	#Decode the JSON response, returns dictionary.
+	response = response.json()['messages']
+	#This dictionary contains only 1 key. Either 'Error' or 'Success'
+	#itervalues().next() returns the value of the key in a list.
+	response = response.itervalues().next()[0]
+	print("[Collect Points]: %s Points: %s" % (str(response), find_points()))
 	
 def find_points():
 	"""
