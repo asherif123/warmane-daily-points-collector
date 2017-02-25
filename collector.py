@@ -5,6 +5,7 @@ import os
 import ConfigParser
 from bs4 import BeautifulSoup
 from functools import wraps
+import msvcrt
 
 def exit_program():
 	"""Waits for the user to press enter then exits."""
@@ -25,24 +26,28 @@ def get_pass():
 	Gets user password without showing the entered characters.
 	Shows ***** instead.
 	"""
-	import msvcrt
-	#Comma after print to avoid new line.
+	# Comma after print to avoid new line.
 	print("Password: "),
 	password = ''
+	
 	while 1:
+		# Get input, 1 character at a time.
 		x = msvcrt.getch()
-		#If input is enter.
+		
+		# If input is enter.
 		if x == '\r' or x == '\n':
 			break
-		#If input is backspace.
+		# If input is backspace.
 		elif x == '\x08':
-			#Only delete from the password string, not the prompt message.
+			# Only delete from the password string
+			# not the prompt message.
 			if len(password) > 0:
 				password = password[:-1]
 				sys.stdout.write('\x08 \x08')
 		else:
 			sys.stdout.write('*')
 			password = password + x
+			
 	msvcrt.putch('\n')
 	return password
 	
@@ -56,20 +61,21 @@ def config_set():
 	"""
 	n_accounts = input('Number of accounts: ')
 	
-	#Create configuration file	to write to it.
+	# Create configuration file to write to it.
 	config_file = open(os.getcwd() + '\\collector-config.ini', 'w')
+	
 	for i in range(0, n_accounts):
 		username = raw_input('\nUsername(%d): ' % (i+1))
 		password = get_pass()
 		
-		#Add the settings to the file, and write it out.
-		#Create a new section for each Account.
+		# Add the settings to the file, and write it out.
+		# Create a new section for each Account.
 		section = 'Account%d' % (i+1)
 		config.add_section(section)
 		config.set(section, 'Username', username)
 		config.set(section, 'Password', password)
 	
-	#Create a new section for program configuration.
+	# Create a new section for program configuration.
 	config.add_section('Program Configuration')
 	config.set('Program Configuration','Number of Accounts',n_accounts)
 
@@ -130,7 +136,8 @@ def find_csrf_token(response):
 	"""
 	soup = BeautifulSoup(response.text, 'lxml')
 	csrf_token = soup.find('meta', {'name': 'csrf-token'})['content']
-	#Add CSRF-Token value to custom_headers.
+	
+	# Add CSRF-Token value to custom_headers.
 	custom_headers['X-CSRF-Token'] = csrf_token
 
 def login(username, password):
@@ -138,12 +145,14 @@ def login(username, password):
 	Logs in account by posting the payload to the
 	login_url and returns the account page if succeeded.
 	"""
-	#Login Form Data
-	payload = {	'return': '',
-				'userID': username,
-				'userPW': password,
-				'userCode': '',
-				'userRM': 'False'}
+	# Login Form Data
+	payload = {
+		'return': '',
+		'userID': username,
+		'userPW': password,
+		'userCode': '',
+		'userRM': 'False',
+	}
 				
 	print"\n[Log In]: Username = %s" % username
 	response = post('https://www.warmane.com/account/login', payload)
@@ -152,15 +161,17 @@ def login(username, password):
 		print'[Log In]: Logged in Successfully!'
 		return True
 	
-	#Warmane is expecting a captcha code!
+	# Warmane is expecting a captcha code!
 	elif "The captcha code provided is incorrect." in response.text:
 		msg = (
 			'[Log In]: Warmane is expecting a captcha code!'
-			' So you have to manually login from the browser to enter it.')
+			' So you have to manually login from the browser to enter it.'
+			)
 		print msg
 		
 	elif "Incorrect account name or password." in response.text:
 		print"[Log In]: Incorrect username or password."
+		
 	return False
 
 def collect_points():
@@ -168,10 +179,10 @@ def collect_points():
 	payload = {'collectpoints': 'true'}
 	response = post('https://www.warmane.com/account', payload)
 
-	#Decode the JSON response, returns dictionary.
+	# Decode the JSON response, returns dictionary.
 	response = response.json()['messages']
-	#This dictionary contains only 1 key. Either 'Error' or 'Success'
-	#itervalues().next() returns the value of the key in a list.
+	# This dictionary contains only 1 key. Either 'Error' or 'Success'
+	# itervalues().next() returns the value of the key in a list.
 	response = response.itervalues().next()[0]
 	print("[Collect Points]: %s Points: %s" % (str(response), find_points()))
 	
@@ -183,10 +194,10 @@ def find_points():
 	response = get('https://www.warmane.com/account')
 	soup = BeautifulSoup(response.text, 'lxml')
 	
-	#The line containing the points value
+	# The line containing the points value
 	points = soup.find_all('span', class_='myPoints')
 	
-	#This is the points value.
+	# This is the points value.
 	points = str(points[0].string)
 	return points
 	
@@ -199,37 +210,37 @@ def logout():
 custom_headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebK it/537.36 \
 	(KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
-	'Referer': 'http://www.warmane.com/account/login'
+	'Referer': 'http://www.warmane.com/account/login',
 	}
 	
-#ssl_cert is the path to the cacert.pem file which contains all
-#trusted certificates used for secure https connection.
+# ssl_cert is the path to the cacert.pem file which contains all
+# trusted certificates used for secure https connection.
 ssl_cert = resource_path('cacert.pem')
 
-#Check if configuration file exists. If it exists, read it
-#and start logging-in and collecting points. Otherwise,
-#create a new configuration file.
+# Check if configuration file exists. If it exists, read it
+# and start logging-in and collecting points. Otherwise,
+# create a new configuration file.
 config = ConfigParser.ConfigParser()
 
-#If configuration file does not exist, create a new one.
+# If configuration file does not exist, create a new one.
 if not os.path.isfile(os.getcwd() + '\\collector-config.ini'):
 	config_set()
 	
-#Get the number of accounts from the configuration file.
+# Get the number of accounts from the configuration file.
 n_accounts = get_n_accounts()
 
-#Initialize the accounts generator.
+# Initialize the accounts generator.
 account_generator = get_account_info(n_accounts)
 
 for i in range(n_accounts):
 	with requests.Session() as s:
-		#account_generator will yield the next username and password.
+		# Account_generator will yield the next username and password.
 		username, password = next(account_generator)
 		response = init_cookies()
 		find_csrf_token(response)
 		status = login(username, password)
 		
-		#If Logged-in successfully.
+		# If Logged-in successfully.
 		if status:
 			collect_points()
 			logout()
