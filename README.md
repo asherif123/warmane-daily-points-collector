@@ -10,4 +10,4 @@ them into a configuration file for later.
 
 Then it will log in all accounts one at a time, collect 
 
-the daily points and and log out.
+the daily points and log out.
