@@ -426,7 +426,7 @@ html, body {
 
 .footer p {
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 
