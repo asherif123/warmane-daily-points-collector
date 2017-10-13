@@ -185,7 +185,7 @@ background-color:#4CAF50;
     perspective-origin: 242.5px 18.5px;
     transform-origin: 242.5px 18.5px;
     caret-color: rgb(51, 51, 51);
-    border: 0px none rgb(128, 128, 128);
+    border: 10px none rgb(128, 128, 128);
     font: normal normal normal normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
     outline: rgb(51, 51, 51) none 0px;
 }/*#TR_5, #TR_9, #TR_14, #TR_19, #TR_24, #TR_29*/
@@ -214,6 +214,28 @@ background-color:#4CAF50;
 }/*#TH_6*/
 
 
+.col2-1Header {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 37px;
+    text-align: center;
+    text-decoration: none solid rgb(51, 51, 51);
+    text-size-adjust: 100%;
+    vertical-align: top;
+    width: 151px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 75.5px 18.5px;
+    transform-origin: 75.5px 18.5px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 1px solid rgb(221, 221, 221);
+    border-right: 0px none rgb(51, 51, 51);
+    border-bottom: 0px none rgb(51, 51, 51);
+    border-left: 0px none rgb(51, 51, 51);
+    font: normal normal bold normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+    padding: 8px;
+}/*#TH_7*/
 
 .col2Header {
     border-collapse: collapse;
@@ -335,6 +357,30 @@ background-color:#4CAF50;
     visibility: visible;
 }
 
+.col2-1 {
+    border-collapse: collapse;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    height: 37px;
+    text-align: center;
+    text-decoration: none solid rgb(51, 51, 51);
+    text-size-adjust: 100%;
+    vertical-align: top;
+    width: 151px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 75.5px 18.5px;
+    transform-origin: 75.5px 18.5px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 1px solid rgb(221, 221, 221);
+    border-right: 0px none rgb(51, 51, 51);
+    border-bottom: 0px none rgb(51, 51, 51);
+    border-left: 10px none rgb(51, 51, 51);
+    font: normal normal normal normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+    
+    
+}
+
 .col2 {
     border-collapse: collapse;
     box-sizing: border-box;
@@ -355,7 +401,8 @@ background-color:#4CAF50;
     border-left: 0px none rgb(51, 51, 51);
     font: normal normal normal normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
     outline: rgb(51, 51, 51) none 0px;
-    padding: 8px;
+    
+    
 }/*#TD_11, #TD_16, #TD_21, #TD_26, #TD_31*/
 
 /*Link of the HEX VALUE
@@ -439,4 +486,63 @@ body:before {
     width: 0;
     margin-top: -32767px;
     /* thank you Erik J - negate effect of float*/
+}
+
+.navbar2 {
+    overflow: hidden;
+    background-color: #333;
+    font-family: Arial;
+}
+
+.navbar2 a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.dropdown2 {
+    float: left;
+    overflow: hidden;
+}
+
+.dropdown2 .dropbtn2 {
+    font-size: 16px;    
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+}
+
+.navbar2 a:hover, .dropdown2:hover .dropbtn2 {
+    background-color: red;
+}
+
+.dropdown2-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown2-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown2-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown2:hover .dropdown2-content {
+    display: block;
 }
