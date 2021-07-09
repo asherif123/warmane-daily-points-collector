@@ -1,5 +1,5 @@
 # Warmane Daily Points Collector  
-<mark>Note:</mark> Does not work with the recent Warmane website  
+**Note** Does not work with the recent Warmane website  
 
 ---
 
